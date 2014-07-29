@@ -2,19 +2,21 @@ package bowling.api
 
 import org.scalatest.FreeSpec
 import bowling.domain.DomainHelpers
+import bowling.TestInjector
 
-class ScoreCardAPIFunctionalTest extends FreeSpec with DomainHelpers {
-  val scoreCardAPI = new ScoreCardAPI
+class MatchAPIFunctionalTest extends FreeSpec with DomainHelpers {
+  val injector = new TestInjector()
+  val matchAPI = injector.matchAPI
 
   "addPlayer" - {
     "should add a player to the score card for the lane." in pendingUntilFixed {
       val laneId = createLaneId()
       val playerName = createPlayerName()
 
-      val playerId = scoreCardAPI.addPlayer(laneId, playerName)
+      val playerId = matchAPI.addPlayer(laneId, playerName)
 
-      assert(scoreCardAPI.getPlayers(laneId).map(_.name).contains(playerName))
-      assert(scoreCardAPI.getPlayers(laneId).map(_.id).contains(playerId))
+      assert(matchAPI.getPlayers(laneId).map(_.name).contains(playerName))
+      assert(matchAPI.getPlayers(laneId).map(_.id).contains(playerId))
     }
   }
 
@@ -23,9 +25,9 @@ class ScoreCardAPIFunctionalTest extends FreeSpec with DomainHelpers {
       val laneId = createLaneId()
       val playerNames = (1 to 5).map(_ => createPlayerName()).toSet
 
-      playerNames.foreach(name => scoreCardAPI.addPlayer(laneId, name))
+      playerNames.foreach(name => matchAPI.addPlayer(laneId, name))
 
-      val players = scoreCardAPI.getPlayers(laneId)
+      val players = matchAPI.getPlayers(laneId)
 
       assert(players.map(_.name) === playerNames)
     }

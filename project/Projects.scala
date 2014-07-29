@@ -7,6 +7,7 @@ object Projects extends Build {
   val root = Project("Bowling",file("."), settings = Defaults.defaultSettings ++ Seq(
 	scalaVersion := scala,
     libraryDependencies ++= Seq(
-      "org.scalatest" %% "scalatest" % "2.0.M5b"
+      "org.scalatest" %% "scalatest" % "2.0.M5b" % "test",
+      "org.mockito"  % "mockito-all" % "1.9.5" % "test"
     )))
 }
