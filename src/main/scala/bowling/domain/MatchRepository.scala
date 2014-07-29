@@ -1,5 +1,6 @@
 package bowling.domain
 
 trait MatchRepository {
-  def find(laneId: LaneId): Match
+  def find(matchId: MatchId): Option[Match]
+  def create(): Match
 }

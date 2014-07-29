@@ -1,7 +1,8 @@
 package bowling.infrastructure.scorecards
 
-import bowling.domain.{Match, LaneId, MatchRepository}
+import bowling.domain.{MatchId, Match, LaneId, MatchRepository}
 
 class DefaultMatchRepository extends MatchRepository {
-  def find(laneId: LaneId): Match = ???
+  def find(matchId: MatchId): Option[Match] = null
+  def create(): Match = null
 }
