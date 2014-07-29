@@ -1,16 +1,16 @@
 package bowling.infrastructure.matches
 
-import bowling.domain.{Match, DomainHelpers}
+import bowling.domain.Match
 import org.scalatest.FreeSpec
 import org.scalatest.mock.MockitoSugar
 import org.mockito.Mockito._
 import bowling.infrastructure.InfrastructureHelpers
 
 class DataStoreMatchRepositoryTest extends FreeSpec with InfrastructureHelpers with MockitoSugar {
-  val mockIdFactory = mock[MatchIdFactory]
+  val mockIdDataStore = mock[MatchIdDataStore]
   val mockDetailsDataStore = mock[MatchDetailsDataStore]
 
-  val repo = new DataStoreMatchRepository(mockIdFactory, mockDetailsDataStore)
+  val repo = new DataStoreMatchRepository(mockIdDataStore, mockDetailsDataStore)
 
   "find" - {
     "should return None when no match details exist" in {
@@ -36,7 +36,7 @@ class DataStoreMatchRepositoryTest extends FreeSpec with InfrastructureHelpers w
     "should create a new match and record new details in the data store" in {
       val matchId = createMatchId()
 
-      when(mockIdFactory.createId()).thenReturn(matchId)
+      when(mockIdDataStore.createId()).thenReturn(matchId)
 
       val result = repo.create()
 
