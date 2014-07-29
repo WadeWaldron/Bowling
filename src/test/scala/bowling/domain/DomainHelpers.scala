@@ -9,7 +9,7 @@ trait DomainHelpers {
   }
 
   def createMatchId() = MatchId(nextInt())
-  def createMatch(id: MatchId = createMatchId(), lane:Lane = createLane(), players: Set[Player] = Set()) = Match(id, lane, players)
+  def createMatch(id: MatchId = createMatchId(), lane:Option[Lane] = None, players: Set[Player] = Set()) = Match(id, lane, players)
 
   def createLaneId() = LaneId(nextInt())
   def createLane(id:LaneId = createLaneId()) = Lane(id)

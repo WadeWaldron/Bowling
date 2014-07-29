@@ -15,10 +15,10 @@ class MatchAPITest extends FreeSpec with DomainHelpers with MockitoSugar {
 
       when(mockRepository.create()).thenReturn(expectedMatch)
 
-      val newMatch = api.createMatch()
+      val matchId = api.createMatch()
 
       verify(mockRepository, times(1)).create()
-      assert(newMatch === expectedMatch)
+      assert(matchId === expectedMatch.id)
     }
   }
 
@@ -32,6 +32,16 @@ class MatchAPITest extends FreeSpec with DomainHelpers with MockitoSugar {
 
       verify(mockRepository, times(1)).find(matchId)
       assert(result === None)
+    }
+    "should return the match when it exists" in {
+      val existingMatch = createMatch()
+
+      when(mockRepository.find(existingMatch.id)).thenReturn(Some(existingMatch))
+
+      val result = api.getMatch(existingMatch.id)
+
+      verify(mockRepository, times(1)).find(existingMatch.id)
+      assert(result === Some(existingMatch))
     }
   }
 }

@@ -7,7 +7,7 @@ import bowling.domain.PlayerId
 import bowling.domain.LaneId
 
 class MatchAPI(matchRepository: MatchRepository) {
-  def createMatch():Match = matchRepository.create()
+  def createMatch():MatchId = matchRepository.create().id
   def getMatch(matchId: MatchId):Option[Match] = matchRepository.find(matchId)
 
   def setLane(matchId: MatchId, laneId: LaneId) {

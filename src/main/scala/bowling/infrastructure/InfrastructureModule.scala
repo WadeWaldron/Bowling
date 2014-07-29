@@ -1,9 +1,11 @@
 package bowling.infrastructure
 
 import bowling.core.Module
-import scorecards.DefaultMatchRepository
-import bowling.domain.MatchRepository
+import matches._
+import bowling.domain.{MatchId, MatchRepository}
 
 trait InfrastructureModule extends Module {
-  lazy val matchRepository:MatchRepository = new DefaultMatchRepository
+  private lazy val matchIdFactory: MatchIdFactory = new InMemoryMatchIdFactory
+  private lazy val matchDetailsDataStore: MatchDetailsDataStore = new InMemoryMatchDetailsDataStore
+  lazy val matchRepository:MatchRepository = new DataStoreMatchRepository(matchIdFactory, matchDetailsDataStore)
 }
