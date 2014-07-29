@@ -7,5 +7,13 @@ trait MatchIdDataStore {
 }
 
 class InMemoryMatchIdDataStore extends MatchIdDataStore {
-  def createId(): MatchId = null
+  private var currentId = 0
+
+  def createId(): MatchId = {
+    synchronized {
+      currentId = currentId + 1
+    }
+
+    MatchId(currentId)
+  }
 }
