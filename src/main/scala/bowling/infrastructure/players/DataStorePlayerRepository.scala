@@ -1,9 +1,14 @@
 package bowling.infrastructure.players
 
-import bowling.domain.{Player, PlayerId, PlayerRepository}
+import bowling.domain._
+import bowling.domain.Player
+import bowling.domain.PlayerId
 
-class DataStorePlayerRepository extends PlayerRepository {
-  def create(): Player = null
+class DataStorePlayerRepository(playerIdDataStore: PlayerIdDataStore) extends PlayerRepository {
+  def create(): Player = {
+    val id = playerIdDataStore.createId()
+    Player(id, PlayerName("Default"))
+  }
   def find(id: PlayerId): Option[Player] = null
   def update(id: PlayerId, value: Player): Player = null
 }
