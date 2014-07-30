@@ -16,4 +16,5 @@ trait DomainHelpers {
 
   def createPlayerName() = PlayerName("PlayerName"+nextInt())
   def createPlayerId() = PlayerId(nextInt())
+  def createPlayer(id: PlayerId = createPlayerId(), name: PlayerName = createPlayerName()) = Player(id, name)
 }

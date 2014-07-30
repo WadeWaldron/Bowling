@@ -1,6 +1,5 @@
 package bowling.domain
 
-trait MatchRepository {
-  def find(matchId: MatchId): Option[Match]
-  def create(): Match
-}
+import bowling.core.Repository
+
+trait MatchRepository extends Repository[MatchId, Match]

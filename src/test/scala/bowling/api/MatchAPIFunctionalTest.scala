@@ -29,10 +29,9 @@ class MatchAPIFunctionalTest extends FreeSpec with DomainHelpers {
       val matchId = matchAPI.createMatch()
       val playerName = createPlayerName()
 
-      val playerId = matchAPI.addPlayer(matchId, playerName)
+      matchAPI.addPlayer(matchId, playerName)
 
       assert(matchAPI.getPlayers(matchId).map(_.name).contains(playerName))
-      assert(matchAPI.getPlayers(matchId).map(_.id).contains(playerId))
     }
   }
 

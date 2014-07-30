@@ -11,4 +11,6 @@ class DataStoreMatchRepository(matchIdFactory: MatchIdDataStore, matchDetailsDat
 
     Match(matchDetails.id, None, Set())
   }
+
+  def update(id: MatchId, value: Match): Match = null
 }
