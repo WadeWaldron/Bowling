@@ -66,8 +66,9 @@ class MatchAPITest extends FreeSpec with DomainHelpers with MockitoSugar {
       when(mockPlayerRepository.create()).thenReturn(player)
       when(mockMatchRepository.find(existingMatch.id)).thenReturn(Some(existingMatch))
 
-      api.addPlayer(existingMatch.id, playerName)
+      val playerId = api.addPlayer(existingMatch.id, playerName)
 
+      assert(playerId === player.id)
       verify(mockMatchRepository, times(1)).update(existingMatch.id, existingMatch.addPlayer(player))
     }
   }

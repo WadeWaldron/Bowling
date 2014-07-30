@@ -12,11 +12,12 @@ class MatchAPI(matchRepository: MatchRepository, playerRepository: PlayerReposit
   def createMatch():MatchId = matchRepository.create().id
   def getMatch(matchId: MatchId):Option[Match] = matchRepository.find(matchId)
 
-  def addPlayer(matchId: MatchId, playerName: PlayerName) = {
+  def addPlayer(matchId: MatchId, playerName: PlayerName):PlayerId = {
     matchRepository.find(matchId) match {
       case Some(existingMatch) => {
         val player = playerRepository.create().setName(playerName)
         matchRepository.update(matchId, existingMatch.addPlayer(player))
+        player.id
       }
       case None => throw new InvalidMatchException(matchId)
     }
