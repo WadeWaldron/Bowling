@@ -9,7 +9,7 @@ class MatchAPIFunctionalTest extends FreeSpec with DomainHelpers {
   val matchAPI = injector.matchAPI
 
   "createMatch" - {
-    "should create a new match." in pendingUntilFixed {
+    "should create a new match." in {
       val matchId = matchAPI.createMatch()
 
       assert(matchAPI.getMatch(matchId).get.id === matchId)
@@ -17,7 +17,7 @@ class MatchAPIFunctionalTest extends FreeSpec with DomainHelpers {
   }
 
   "getMatch" - {
-    "should return the match if it exists." in pendingUntilFixed {
+    "should return the match if it exists." in {
       val matchId = matchAPI.createMatch()
 
       assert(matchAPI.getMatch(matchId).get.id === matchId)
