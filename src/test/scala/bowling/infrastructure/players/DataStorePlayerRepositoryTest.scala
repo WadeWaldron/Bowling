@@ -35,4 +35,25 @@ class DataStorePlayerRepositoryTest extends FreeSpec with InfrastructureHelpers 
       verify(mockPlayerDetailsDataStore, times(1)).save(playerDetails)
     }
   }
+  "find" - {
+    "should return None when the player does not exist" in {
+      val playerId = createPlayerId()
+
+      when(mockPlayerDetailsDataStore.find(playerId)).thenReturn(None)
+
+      val result = repo.find(playerId)
+
+      assert(result === None)
+    }
+    "should return the player when they exist" in {
+      val player = createPlayer()
+      val details = createPlayerDetails(player.id, player.name)
+
+      when(mockPlayerDetailsDataStore.find(player.id)).thenReturn(Some(details))
+
+      val result = repo.find(player.id)
+
+      assert(result === Some(player))
+    }
+  }
 }
