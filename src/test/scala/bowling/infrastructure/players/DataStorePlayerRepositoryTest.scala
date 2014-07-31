@@ -46,14 +46,13 @@ class DataStorePlayerRepositoryTest extends FreeSpec with InfrastructureHelpers 
       assert(result === None)
     }
     "should return the player when they exist" in {
-      val player = createPlayer()
-      val details = createPlayerDetails(player.id, player.name)
+      val details = createPlayerDetails()
 
-      when(mockPlayerDetailsDataStore.find(player.id)).thenReturn(Some(details))
+      when(mockPlayerDetailsDataStore.find(details.id)).thenReturn(Some(details))
 
-      val result = repo.find(player.id)
+      val result = repo.find(details.id)
 
-      assert(result === Some(player))
+      assert(result === Some(Player(details.id, details.name)))
     }
   }
 }
