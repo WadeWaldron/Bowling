@@ -7,7 +7,8 @@ import org.mockito.Mockito._
 
 class DataStorePlayerRepositoryTest extends FreeSpec with DomainHelpers with MockitoSugar {
   val mockIdDataStore = mock[PlayerIdDataStore]
-  val repo = new DataStorePlayerRepository(mockIdDataStore)
+  val mockPlayerDetailsDataStore = mock[PlayerDetailsDataStore]
+  val repo = new DataStorePlayerRepository(mockIdDataStore, mockPlayerDetailsDataStore)
 
   "create" - {
     "should return a new player" in {

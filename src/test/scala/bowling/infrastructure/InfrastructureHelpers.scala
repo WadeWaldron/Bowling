@@ -1,8 +1,15 @@
 package bowling.infrastructure
 
-import bowling.domain.{LaneId, MatchId, DomainHelpers}
+import bowling.domain._
 import matches.MatchDetails
+import matches.MatchDetails
+import players.PlayerDetails
+import players.PlayerDetails
+import bowling.domain.PlayerId
+import bowling.domain.MatchId
+import bowling.domain.LaneId
 
 trait InfrastructureHelpers extends DomainHelpers {
   def createMatchDetails(id: MatchId = createMatchId(), lane: Option[LaneId] = None) = MatchDetails(id, lane)
+  def createPlayerDetails(id: PlayerId = createPlayerId(), name: PlayerName = createPlayerName()) = PlayerDetails(id, name)
 }

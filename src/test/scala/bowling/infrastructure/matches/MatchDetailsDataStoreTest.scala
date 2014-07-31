@@ -34,5 +34,12 @@ class MatchDetailsDataStoreTest extends FreeSpec with InfrastructureHelpers {
 
       assert(dataStore.find(originalDetails.id) === Some(updatedDetails))
     }
+    "should not overwrite details with a different id" in {
+      val details1 = dataStore.save(createMatchDetails())
+      val details2 = dataStore.save(createMatchDetails())
+
+      assert(dataStore.find(details1.id) === Some(details1))
+      assert(dataStore.find(details2.id) === Some(details2))
+    }
   }
 }
