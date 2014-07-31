@@ -14,6 +14,7 @@ class MatchAPI(matchRepository: MatchRepository, playerRepository: PlayerReposit
     matchRepository.find(matchId) match {
       case Some(existingMatch) => {
         val player = playerRepository.create().setName(playerName)
+        playerRepository.update(player.id, player)
         matchRepository.update(matchId, existingMatch.addPlayer(player))
         player.id
       }
@@ -22,10 +23,9 @@ class MatchAPI(matchRepository: MatchRepository, playerRepository: PlayerReposit
   }
 
   def getPlayers(matchId: MatchId):Set[Player] = {
-    null
-  }
-
-  def setLane(matchId: MatchId, laneId: LaneId) {
-
+    getMatch(matchId) match {
+      case Some(existingMatch) => existingMatch.players
+      case None => throw new InvalidMatchException("The requested match does not exist: "+matchId)
+    }
   }
 }

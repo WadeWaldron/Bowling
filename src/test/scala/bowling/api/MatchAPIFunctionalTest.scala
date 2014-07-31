@@ -25,7 +25,7 @@ class MatchAPIFunctionalTest extends FreeSpec with DomainHelpers {
   }
 
   "addPlayer" - {
-    "should add a player to the score card for the lane." in pendingUntilFixed {
+    "should add a player to the score card for the lane." in {
       val matchId = matchAPI.createMatch()
       val playerName = createPlayerName()
 
@@ -36,7 +36,7 @@ class MatchAPIFunctionalTest extends FreeSpec with DomainHelpers {
   }
 
   "getPlayers" - {
-    "should return a set of all players." in pendingUntilFixed {
+    "should return a set of all players." in {
       val matchId = matchAPI.createMatch()
       val playerNames = (1 to 5).map(_ => createPlayerName()).toSet
 

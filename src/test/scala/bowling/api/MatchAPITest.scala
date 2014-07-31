@@ -58,7 +58,7 @@ class MatchAPITest extends FreeSpec with DomainHelpers with MockitoSugar {
         api.addPlayer(matchId, createPlayerName())
       }
     }
-    "should add a new player to the match" in {
+    "should add a new player to the match and save the player" in {
       val playerName = createPlayerName()
       val existingMatch = createMatch()
       val player = createPlayer().setName(playerName)
@@ -69,7 +69,41 @@ class MatchAPITest extends FreeSpec with DomainHelpers with MockitoSugar {
       val playerId = api.addPlayer(existingMatch.id, playerName)
 
       assert(playerId === player.id)
+
+      verify(mockPlayerRepository, times(1)).update(player.id, player)
       verify(mockMatchRepository, times(1)).update(existingMatch.id, existingMatch.addPlayer(player))
+    }
+  }
+
+  "getPlayers" - {
+    "should throw an exception if the match does not exist" in {
+      val matchId = createMatchId()
+
+      when(mockMatchRepository.find(matchId)).thenReturn(None)
+
+      intercept[InvalidMatchException] {
+        api.getPlayers(matchId)
+      }
+    }
+    "should return an empty set if no players have been assigned to the Match" in {
+      val existingMatch = createMatch(players = Set())
+
+      when(mockMatchRepository.find(existingMatch.id)).thenReturn(Some(existingMatch))
+
+      val result = api.getPlayers(existingMatch.id)
+
+      assert(result === Set())
+    }
+    "should return all players who have been added to the match" in {
+      val player1 = createPlayer()
+      val player2 = createPlayer()
+      val existingMatch = createMatch(players = Set(player1, player2))
+
+      when(mockMatchRepository.find(existingMatch.id)).thenReturn(Some(existingMatch))
+
+      val result = api.getPlayers(existingMatch.id)
+
+      assert(result === Set(player1, player2))
     }
   }
 }
