@@ -10,5 +10,9 @@ class DataStorePlayerRepository(playerIdDataStore: PlayerIdDataStore, playerDeta
     Player(id, PlayerName("Default"))
   }
   def find(id: PlayerId): Option[Player] = null
-  def update(id: PlayerId, value: Player): Player = null
+  def update(id: PlayerId, value: Player): Player = {
+    val details = PlayerDetails(id, value.name)
+    playerDetailsDataStore.save(details)
+    value
+  }
 }

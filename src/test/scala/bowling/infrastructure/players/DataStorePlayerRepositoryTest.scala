@@ -4,8 +4,9 @@ import org.scalatest.FreeSpec
 import bowling.domain.{PlayerName, Player, DomainHelpers}
 import org.scalatest.mock.MockitoSugar
 import org.mockito.Mockito._
+import bowling.infrastructure.InfrastructureHelpers
 
-class DataStorePlayerRepositoryTest extends FreeSpec with DomainHelpers with MockitoSugar {
+class DataStorePlayerRepositoryTest extends FreeSpec with InfrastructureHelpers with MockitoSugar {
   val mockIdDataStore = mock[PlayerIdDataStore]
   val mockPlayerDetailsDataStore = mock[PlayerDetailsDataStore]
   val repo = new DataStorePlayerRepository(mockIdDataStore, mockPlayerDetailsDataStore)
@@ -19,6 +20,19 @@ class DataStorePlayerRepositoryTest extends FreeSpec with DomainHelpers with Moc
       val player = repo.create()
 
       assert(player === Player(playerId, PlayerName("Default")))
+    }
+  }
+  "update" - {
+    "should update the player and return it" in {
+      val playerDetails = createPlayerDetails()
+      val player = createPlayer(playerDetails.id, playerDetails.name)
+
+      when(mockPlayerDetailsDataStore.save(playerDetails)).thenReturn(playerDetails)
+
+      val result = repo.update(player.id, player)
+
+      assert(result === player)
+      verify(mockPlayerDetailsDataStore, times(1)).save(playerDetails)
     }
   }
 }
