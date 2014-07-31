@@ -1,9 +1,19 @@
 package bowling.infrastructure.matches
 
-import bowling.domain.{MatchId, Match, LaneId, MatchRepository}
+import bowling.domain._
+import bowling.domain.Match
+import bowling.domain.MatchId
 
-class DataStoreMatchRepository(matchIdFactory: MatchIdDataStore, matchDetailsDataStore: MatchDetailsDataStore) extends MatchRepository {
-  def find(matchId: MatchId): Option[Match] = matchDetailsDataStore.find(matchId: MatchId).map(details => Match(details.id, None, Set()))
+class DataStoreMatchRepository(matchIdFactory: MatchIdDataStore, matchDetailsDataStore: MatchDetailsDataStore, playerRepository: PlayerRepository) extends MatchRepository {
+  def find(matchId: MatchId): Option[Match] = {
+
+    matchDetailsDataStore.find(matchId: MatchId).map(details => {
+      val players = details.players.map(p => playerRepository.find(p).getOrElse(throw new InvalidMatchException("Invalid Player For Match: "+matchId+" -> "+p)))
+      val lane = details.lane.map(id => Lane(id))
+      Match(details.id, lane, players)
+    })
+  }
+
   def create(): Match = {
     val matchDetails = new MatchDetails(matchIdFactory.createId(), None, Set())
 

@@ -6,8 +6,6 @@ import bowling.domain.PlayerName
 import bowling.domain.PlayerId
 import bowling.domain.LaneId
 
-case class InvalidMatchException(matchId: MatchId) extends IllegalArgumentException("The requested match does not exist: "+matchId)
-
 class MatchAPI(matchRepository: MatchRepository, playerRepository: PlayerRepository) {
   def createMatch():MatchId = matchRepository.create().id
   def getMatch(matchId: MatchId):Option[Match] = matchRepository.find(matchId)
@@ -19,7 +17,7 @@ class MatchAPI(matchRepository: MatchRepository, playerRepository: PlayerReposit
         matchRepository.update(matchId, existingMatch.addPlayer(player))
         player.id
       }
-      case None => throw new InvalidMatchException(matchId)
+      case None => throw new InvalidMatchException("The requested match does not exist: "+matchId)
     }
   }
 
