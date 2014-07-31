@@ -41,7 +41,7 @@ class DataStoreMatchRepositoryTest extends FreeSpec with InfrastructureHelpers w
       val result = repo.create()
 
       assert(result.id === matchId)
-      verify(mockDetailsDataStore, times(1)).save(MatchDetails(matchId, None))
+      verify(mockDetailsDataStore, times(1)).save(MatchDetails(matchId, None, Set()))
     }
   }
 }

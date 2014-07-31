@@ -1,9 +1,9 @@
 package bowling.infrastructure.matches
 
-import bowling.domain.{LaneId, MatchId}
+import bowling.domain.{PlayerId, LaneId, MatchId}
 import collection.mutable
 
-case class MatchDetails(id: MatchId, lane: Option[LaneId])
+case class MatchDetails(id: MatchId, lane: Option[LaneId], players: Set[PlayerId])
 
 trait MatchDetailsDataStore {
   def find(id: MatchId): Option[MatchDetails]
