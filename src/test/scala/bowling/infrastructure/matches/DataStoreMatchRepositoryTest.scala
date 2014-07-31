@@ -44,4 +44,17 @@ class DataStoreMatchRepositoryTest extends FreeSpec with InfrastructureHelpers w
       verify(mockDetailsDataStore, times(1)).save(MatchDetails(matchId, None, Set()))
     }
   }
+  "update" - {
+    "should update the details of the match and return the match" in {
+      val updatedMatch = createMatch()
+      val expectedDetails = MatchDetails(updatedMatch.id, updatedMatch.lane.map(_.id), updatedMatch.players.map(_.id))
+
+      when(mockDetailsDataStore.save(expectedDetails)).thenReturn(expectedDetails)
+
+      val result = repo.update(updatedMatch.id, updatedMatch)
+
+      assert(result === updatedMatch)
+      verify(mockDetailsDataStore, times(1)).save(expectedDetails)
+    }
+  }
 }

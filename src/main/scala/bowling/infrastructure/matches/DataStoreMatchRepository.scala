@@ -12,5 +12,11 @@ class DataStoreMatchRepository(matchIdFactory: MatchIdDataStore, matchDetailsDat
     Match(matchDetails.id, None, Set())
   }
 
-  def update(id: MatchId, value: Match): Match = null
+  def update(id: MatchId, value: Match): Match = {
+    val matchDetails = new MatchDetails(id, value.lane.map(_.id), value.players.map(_.id))
+
+    matchDetailsDataStore.save(matchDetails)
+
+    value
+  }
 }
