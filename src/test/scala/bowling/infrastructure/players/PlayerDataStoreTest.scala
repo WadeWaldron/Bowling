@@ -6,10 +6,9 @@ import org.scalatest.mock.MockitoSugar
 import org.mockito.Mockito._
 import bowling.infrastructure.InfrastructureHelpers
 
-class DataStorePlayerRepositoryTest extends FreeSpec with InfrastructureHelpers with MockitoSugar {
+class DataStorePlayerFactoryTest extends FreeSpec with InfrastructureHelpers with MockitoSugar {
   val mockIdDataStore = mock[PlayerIdDataStore]
-  val mockPlayerDetailsDataStore = mock[PlayerDetailsDataStore]
-  val repo = new DataStorePlayerRepository(mockIdDataStore, mockPlayerDetailsDataStore)
+  val repo = new DataStorePlayerFactory(mockIdDataStore)
 
   "create" - {
     "should return a new player" in {
@@ -22,6 +21,12 @@ class DataStorePlayerRepositoryTest extends FreeSpec with InfrastructureHelpers 
       assert(player === Player(playerId, PlayerName("Default")))
     }
   }
+}
+
+class PlayerDataStoreTest extends FreeSpec with InfrastructureHelpers with MockitoSugar {
+  val mockPlayerDetailsDataStore = mock[PlayerDetailsDataStore]
+  val repo = new PlayerDataStore(mockPlayerDetailsDataStore)
+
   "update" - {
     "should update the player and return it" in {
       val playerDetails = createPlayerDetails()

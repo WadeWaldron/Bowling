@@ -9,8 +9,8 @@ import scala.Some
 
 class MatchAPITest extends FreeSpec with DomainHelpers with MockitoSugar {
   val mockMatchRepository = mock[MatchRepository]
-  val mockPlayerRepository = mock[PlayerRepository]
-  val api = new MatchAPI(mockMatchRepository, mockPlayerRepository)
+  val mockPlayerFactory = mock[PlayerFactory]
+  val api = new MatchAPI(mockMatchRepository, mockPlayerFactory)
 
   "createMatch" - {
     "should create a match and return it" in {
@@ -63,14 +63,13 @@ class MatchAPITest extends FreeSpec with DomainHelpers with MockitoSugar {
       val existingMatch = createMatch()
       val player = createPlayer().setName(playerName)
 
-      when(mockPlayerRepository.create()).thenReturn(player)
+      when(mockPlayerFactory.create()).thenReturn(player)
       when(mockMatchRepository.find(existingMatch.id)).thenReturn(Some(existingMatch))
 
       val playerId = api.addPlayer(existingMatch.id, playerName)
 
       assert(playerId === player.id)
 
-      verify(mockPlayerRepository, times(1)).update(player.id, player)
       verify(mockMatchRepository, times(1)).update(existingMatch.id, existingMatch.addPlayer(player))
     }
   }

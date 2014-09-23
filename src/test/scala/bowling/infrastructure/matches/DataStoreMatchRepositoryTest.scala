@@ -1,17 +1,18 @@
 package bowling.infrastructure.matches
 
-import bowling.domain.{InvalidMatchException, PlayerRepository, Match}
+import bowling.domain.{InvalidMatchException, PlayerFactory, Match}
+import bowling.infrastructure.players.PlayerDataStore
 import org.scalatest.FreeSpec
 import org.scalatest.mock.MockitoSugar
 import org.mockito.Mockito._
 import bowling.infrastructure.InfrastructureHelpers
 
 class DataStoreMatchRepositoryTest extends FreeSpec with InfrastructureHelpers with MockitoSugar {
-  val mockPlayerRepository = mock[PlayerRepository]
+  val mockPlayerDataStore = mock[PlayerDataStore]
   val mockIdDataStore = mock[MatchIdDataStore]
   val mockDetailsDataStore = mock[MatchDetailsDataStore]
 
-  val repo = new DataStoreMatchRepository(mockIdDataStore, mockDetailsDataStore, mockPlayerRepository)
+  val repo = new DataStoreMatchRepository(mockIdDataStore, mockDetailsDataStore, mockPlayerDataStore)
 
   "find" - {
     "should return None when no match details exist" in {
@@ -48,8 +49,8 @@ class DataStoreMatchRepositoryTest extends FreeSpec with InfrastructureHelpers w
       val matchDetails = createMatchDetails(players = Set(player1.id, player2.id))
 
       when(mockDetailsDataStore.find(matchDetails.id)).thenReturn(Some(matchDetails))
-      when(mockPlayerRepository.find(player1.id)).thenReturn(Some(player1))
-      when(mockPlayerRepository.find(player2.id)).thenReturn(Some(player2))
+      when(mockPlayerDataStore.find(player1.id)).thenReturn(Some(player1))
+      when(mockPlayerDataStore.find(player2.id)).thenReturn(Some(player2))
 
       val result = repo.find(matchDetails.id)
 
@@ -60,7 +61,7 @@ class DataStoreMatchRepositoryTest extends FreeSpec with InfrastructureHelpers w
       val matchDetails = createMatchDetails(players = Set(player.id))
 
       when(mockDetailsDataStore.find(matchDetails.id)).thenReturn(Some(matchDetails))
-      when(mockPlayerRepository.find(player.id)).thenReturn(None)
+      when(mockPlayerDataStore.find(player.id)).thenReturn(None)
 
       intercept[InvalidMatchException] {
         repo.find(matchDetails.id)
@@ -81,7 +82,9 @@ class DataStoreMatchRepositoryTest extends FreeSpec with InfrastructureHelpers w
   }
   "update" - {
     "should update the details of the match and return the match" in {
-      val updatedMatch = createMatch()
+      val player = createPlayer()
+      val lane = createLane()
+      val updatedMatch = createMatch(lane = Some(lane), players = Set(player))
       val expectedDetails = MatchDetails(updatedMatch.id, updatedMatch.lane.map(_.id), updatedMatch.players.map(_.id))
 
       when(mockDetailsDataStore.save(expectedDetails)).thenReturn(expectedDetails)
@@ -89,6 +92,7 @@ class DataStoreMatchRepositoryTest extends FreeSpec with InfrastructureHelpers w
       val result = repo.update(updatedMatch.id, updatedMatch)
 
       assert(result === updatedMatch)
+      verify(mockPlayerDataStore, times(1)).update(player.id, player)
       verify(mockDetailsDataStore, times(1)).save(expectedDetails)
     }
   }

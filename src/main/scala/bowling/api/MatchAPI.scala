@@ -6,15 +6,14 @@ import bowling.domain.PlayerName
 import bowling.domain.PlayerId
 import bowling.domain.LaneId
 
-class MatchAPI(matchRepository: MatchRepository, playerRepository: PlayerRepository) {
+class MatchAPI(matchRepository: MatchRepository, playerFactory: PlayerFactory) {
   def createMatch():MatchId = matchRepository.create().id
   def getMatch(matchId: MatchId):Option[Match] = matchRepository.find(matchId)
 
   def addPlayer(matchId: MatchId, playerName: PlayerName):PlayerId = {
     matchRepository.find(matchId) match {
       case Some(existingMatch) => {
-        val player = playerRepository.create().setName(playerName)
-        playerRepository.update(player.id, player)
+        val player = playerFactory.create().setName(playerName)
         matchRepository.update(matchId, existingMatch.addPlayer(player))
         player.id
       }

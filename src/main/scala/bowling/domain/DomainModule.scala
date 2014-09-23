@@ -4,5 +4,5 @@ import bowling.core.Module
 
 trait DomainModule extends Module {
   def matchRepository: MatchRepository
-  def playerRepository: PlayerRepository
+  def playerFactory: PlayerFactory
 }
